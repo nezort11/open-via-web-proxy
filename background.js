@@ -21,17 +21,28 @@ chrome.runtime.onInstalled.addListener(async () => {
   // }
 });
 
-// Open a new search tab when the user clicks a context menu
-chrome.contextMenus.onClicked.addListener((eventInfo, tab) => {
-  // const tld = item.menuItemId;
-  // const url = new URL(`https://google.${tld}/search`);
-  // url.searchParams.set("q", item.selectionText);
-
-  const encodedLink = encodeURIComponent(eventInfo.linkUrl);
+const getProxyLink = (link) => {
+  const encodedLink = encodeURIComponent(link);
   const proxyLink = `https://wproxy.vercel.app/?country=pl&url=${encodedLink}`;
+  return proxyLink;
+};
 
+chrome.contextMenus.onClicked.addListener((eventInfo, tab) => {
+  const proxyLink = getProxyLink(eventInfo.linkUrl);
   chrome.tabs.create({ url: proxyLink, index: tab.index + 1 });
 });
+
+chrome.action.onClicked.addListener((tab) => {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const currentTab = tabs[0];
+    var currentUrl = currentTab.url || currentTab.pendingUrl;
+    console.log("currentUrl:", currentUrl);
+
+    const proxyLink = getProxyLink(currentUrl);
+    chrome.tabs.create({ url: proxyLink, index: currentTab.index + 1 });
+  });
+});
+
 
 // Add or removes the locale from context menu
 // when the user checks or unchecks the locale in the popup
