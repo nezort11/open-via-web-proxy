@@ -2,6 +2,11 @@
 
 # [Open in Web Proxy](https://chromewebstore.google.com/detail/laaepjcccajdjdjoeelbppmafkdcnnlp)
 
+Can be installed in the following browsers:
+- 🖥️ Desktop: Chrome
+- 📱 iOS: [Orion](https://apps.apple.com/app/id1484498200)
+- 🤖 Android: Edge, Kiwi browser
+
 This sample demonstrates the `chrome.contextMenus` API by letting a user switch
 between searching different countries' versions of Google via a `contextMenu`.
 
