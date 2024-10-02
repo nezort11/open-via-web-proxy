@@ -22,8 +22,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 const getProxyLink = (link) => {
-  const encodedLink = encodeURIComponent(link);
-  const proxyLink = `https://wproxy.vercel.app/?country=pl&url=${encodedLink}`;
+  const proxyLink = `https://ewp.deno.dev/${link}`;
   return proxyLink;
 };
 
