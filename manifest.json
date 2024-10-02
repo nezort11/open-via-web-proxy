@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "1.1",
+  "version": "1.2",
   "name": "Open via Web Proxy",
   "description": "Open any website via online web proxy. Enjoy viewing any content without censorship restrictions without installing VPN services.",
   "permissions": ["contextMenus", "storage", "activeTab", "webNavigation"],
