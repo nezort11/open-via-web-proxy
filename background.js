@@ -42,6 +42,39 @@ chrome.action.onClicked.addListener((tab) => {
   });
 });
 
+const checkAutoWebProxy = (tabUrl, tabId) => {
+  chrome.storage.sync.get("proxyDomains", (data) => {
+    console.log("proxyDomains:", data.proxyDomains);
+    if (data.proxyDomains) {
+      const proxyDomainsList = data.proxyDomains.split(",");
+      console.log("proxyDomainsList", proxyDomainsList);
+      for (const proxyDomain of proxyDomainsList) {
+        const proxyDomainRegex = proxyDomain.replace(".", "\\.");
+        const urlDomainRegex = new RegExp(
+          `^https?:\/\/([a-zA-Z0-9-]+\.)*${proxyDomainRegex}(\/|$)`
+        );
+
+        const tabUrlObject = new URL(tabUrl);
+        // If tab origin (shorter) matches any of automatically proxy domains then redirect tab via web proxy
+        if (tabUrlObject.origin.match(urlDomainRegex)) {
+          const proxyLink = getProxyLink(tabUrl);
+          chrome.tabs.update(tabId, { url: proxyLink }, () => {
+            console.log(`Tab with ID: ${tabId} has been web proxied`);
+          });
+
+          break;
+        }
+      }
+    }
+  });
+};
+
+chrome.tabs.onCreated.addListener((tab) => {
+  console.log("new tab has opened:", tab);
+  const newTabUrl = tab.url || tab.pendingUrl;
+  checkAutoWebProxy(newTabUrl, tab.id);
+});
+
 
 // Add or removes the locale from context menu
 // when the user checks or unchecks the locale in the popup
